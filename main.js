@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function ShowStats()
 {
-  let totaldata = await GetAchievementData();
+  let totaldata = await GetData("achievements");
   
   let total = totaldata.length;
   
-  let accountdata = await GetAccountAchievementData();
+  let accountdata = await GetData("account/achievements?access_token=" + APIKey);
   
   let earned = GetCountOfAchievedAchievements( accountdata );
   
@@ -23,30 +23,23 @@ async function ShowStats()
   document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE1$", nonrepeat);
 }
 
-async function GetAchievementData()
+async function GetData( url )
 {
-  const response = await fetch(APIURL + "achievements");
+  const response = await fetch(APIURL + url);
+  
+  // Verify that we have some sort of 2xx response that we can use
+  if (!response.ok) {
+      console.log("Error trying to load the list of users: ");
+      throw response;
+  }
+  // If no content, immediately resolve, don't try to parse JSON
+  if (response.status === 204) {
+      return [];
+  }
   
   const data = await response.json();
   
   return data;
-}
-
-async function GetAccountAchievementData()
-{
-  const response = await fetch(APIURL + "account/achievements?access_token=" + APIKey);
-    // Verify that we have some sort of 2xx response that we can use
-    if (!response.ok) {
-        console.log("Error trying to load the list of users: ");
-        throw response;
-    }
-    // If no content, immediately resolve, don't try to parse JSON
-    if (response.status === 204) {
-        return [];
-    }
-    const data = await response.json();
-    
-    return data;
 }
 
 function GetCountOfAchievedAchievements( data )
