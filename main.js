@@ -1,4 +1,4 @@
-var APIKey = "195F7C54-FC5E-6F48-BE42-68D9169CE12747022F1E-A68E-463D-9F3C-D746C29BC711";
+var APIKey = "?access_token=195F7C54-FC5E-6F48-BE42-68D9169CE12747022F1E-A68E-463D-9F3C-D746C29BC711";
 var APIURL = "https://api.guildwars2.com/v2/";
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -11,7 +11,7 @@ async function ShowStats()
   
   let total = totaldata.length;
   
-  let accountdata = await GetData("account/achievements?access_token=" + APIKey);
+  let accountdata = await GetData("account/achievements" + APIKey);
   
   let earned = GetCountOfAchievedAchievements( accountdata );
   
@@ -19,8 +19,62 @@ async function ShowStats()
   
   document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE1$", total);
   document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE2$", earned);
+  document.getElementById("data1").style.display = "block";
+  
+  let undone = total - earned;
+  
+  undone = undone / total;
+  earned = earned / total;
+  
+  SetupEarnedAchievementGraph( undone, earned );
   
   document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE1$", nonrepeat);
+  document.getElementById("data2").style.display = "block";
+}
+
+function SetupEarnedAchievementGraph( unearned, earned )
+{
+  var chart = Highcharts.chart('chart1', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Percentage Completed',
+        align: 'center'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+        name: 'Achievements',
+        colorByPoint: true,
+        data: [{
+            name: 'Not Done',
+            y: unearned,
+        }, {
+            name: 'Done',
+            y: earned
+        }]
+    }]
+  });
 }
 
 async function GetData( url )
@@ -29,7 +83,7 @@ async function GetData( url )
   
   // Verify that we have some sort of 2xx response that we can use
   if (!response.ok) {
-      console.log("Error trying to load the list of users: ");
+      console.log("Error trying to load achievement data");
       throw response;
   }
   // If no content, immediately resolve, don't try to parse JSON

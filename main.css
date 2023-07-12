@@ -9,7 +9,10 @@ h1
 h3
 {
   text-align: center;
-  margin: 0%;
+}
+p
+{
+  text-align: center;
 }
 
 .header
@@ -18,15 +21,18 @@ h3
   margin: auto;
 }
 
-.subheader
-{
-  width: 33%;
-  float: left;
-  text-align: center;
-}
-
 body
 {
   font-family: 'Lusitana';
   font-size: 15px;
+}
+
+.value
+{
+  font-weight: bold;
+}
+
+.datadriven
+{
+  display: none;
 }
