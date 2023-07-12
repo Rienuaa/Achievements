@@ -7,18 +7,77 @@ document.addEventListener('DOMContentLoaded', function() {
 
 async function ShowStats()
 {
-  let data = await GetAccountAchievementData();
+  let totaldata = await GetAchievementData();
   
-  let total = data.length;
+  let total = totaldata.length;
   
-  document.getElementById("total").innerHTML = document.getElementById("total").innerHTML.replace("$VALUE1$", total);
+  let accountdata = await GetAccountAchievementData();
+  
+  let earned = GetCountOfAchievedAchievements( accountdata );
+  
+  let nonrepeat = GetNonRepeatAchievements( accountdata );
+  
+  document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE1$", total);
+  document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE2$", earned);
+  
+  document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE1$", nonrepeat);
 }
 
-async function GetAccountAchievementData()
+async function GetAchievementData()
 {
   const response = await fetch(APIURL + "achievements");
   
   const data = await response.json();
   
   return data;
+}
+
+async function GetAccountAchievementData()
+{
+  const response = await fetch(APIURL + "account/achievements?access_token=" + APIKey);
+    // Verify that we have some sort of 2xx response that we can use
+    if (!response.ok) {
+        console.log("Error trying to load the list of users: ");
+        throw response;
+    }
+    // If no content, immediately resolve, don't try to parse JSON
+    if (response.status === 204) {
+        return [];
+    }
+    const data = await response.json();
+    
+    return data;
+}
+
+function GetCountOfAchievedAchievements( data )
+{
+  let total = 0;
+  
+  for (let i = 0; i < data.length; i++)
+  {
+    if ( data[i].done == true )
+    {
+      total++;
+    }
+  }
+  
+  return total;
+}
+
+function GetNonRepeatAchievements( data )
+{
+  let total = 0;
+  
+  for (let i = 0; i < data.length; i++)
+  {
+    if ( data[i].done == true )
+    {
+      if ( !data[i].hasOwnProperty("repeated") )
+      {
+        total++;
+      }
+    }
+  }
+  
+  return total;
 }
