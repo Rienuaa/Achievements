@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+h1
+{
+  text-align: center;
+  font-weight: bold;
+  margin: 0%;
+}
+h3
+{
+  text-align: center;
+  margin: 0%;
+}
+
+.header
+{
+  width: 100%;
+  margin: auto;
+}
+
+.subheader
+{
+  width: 33%;
+  float: left;
+  text-align: center;
+}
+
+body
+{
+  font-family: 'Lusitana';
+  font-size: 35px;
+}
