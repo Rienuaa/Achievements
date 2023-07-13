@@ -31,8 +31,22 @@ async function ShowStats()
   
   SetupEarnedAchievementGraph( undone, earned );
   
+  let accountinfo = await GetData("account" + APIKey);
+  
+  let dailies = GetTotalDailyAchievements( accountinfo );
+  
   document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE1$", nonrepeat);
+  document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE2$", dailies);
   document.getElementById("data2").style.display = "block";
+}
+
+function GetTotalDailyAchievements( data )
+{
+  let total = data.daily_ap;
+  
+  let modified = total / 10;
+  
+  return Math.floor(modified);
 }
 
 function SetupEarnedAchievementGraph( unearned, earned )
