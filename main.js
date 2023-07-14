@@ -2,28 +2,44 @@ var APIKeyBase = "?access_token=";
 var APIURL = "https://api.guildwars2.com/v2/";
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ShowStats();
+    LoadCookie();
 }, false);
 
 async function ShowStats()
 {
   let APIKey = document.getElementById("APIKey").value;
+  SaveCookie( APIKey );
   APIKey = APIKeyBase + APIKey;
   
   let totaldata = await GetData("achievements");
   
-  let total = totaldata.length;
+  let accountinfo = await GetData("account" + APIKey); 
   
   let accountdata = await GetData("account/achievements" + APIKey);
   
-  let earned = GetCountOfAchievedAchievements( accountdata );
+  // playtime and start date
+  let date = new Date(accountinfo.created);
+  let startdate = date.toLocaleDateString('en-us', { weekday:"long", year:"numeric", month:"short", day:"numeric"});
   
-  let nonrepeat = GetNonRepeatAchievements( accountdata );
+  let playtime = accountinfo.age;
+  playtime = playtime / 60; // seconds to minutes
+  playtime = playtime / 60; // minutes to hours
+  playtime = Math.floor(playtime); // truncate
   
-  document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE1$", total);
-  document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE2$", earned);
+  document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE1$", startdate);
+  document.getElementById("data1").innerHTML = document.getElementById("data1").innerHTML.replace("$VALUE2$", playtime);
   document.getElementById("data1").style.display = "block";
   
+  // total achievements and total earned
+  let total = totaldata.length;
+  
+  let earned = GetCountOfAchievedAchievements( accountdata );
+  
+  document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE1$", total);
+  document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE2$", earned);
+  document.getElementById("data2").style.display = "block";
+  
+  // total achievements graph
   let undone = total - earned;
   
   undone = undone / total;
@@ -31,13 +47,33 @@ async function ShowStats()
   
   SetupEarnedAchievementGraph( undone, earned );
   
-  let accountinfo = await GetData("account" + APIKey);
-  
+  // nonrepeats and dailies
+  let nonrepeat = GetNonRepeatAchievements( accountdata );
   let dailies = GetTotalDailyAchievements( accountinfo );
   
-  document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE1$", nonrepeat);
-  document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE2$", dailies);
-  document.getElementById("data2").style.display = "block";
+  document.getElementById("data3").innerHTML = document.getElementById("data3").innerHTML.replace("$VALUE1$", nonrepeat);
+  document.getElementById("data3").innerHTML = document.getElementById("data3").innerHTML.replace("$VALUE2$", dailies);
+  document.getElementById("data3").style.display = "block";
+}
+
+function SaveCookie( APIKey )
+{
+  var today = new Date();
+  var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+  
+  document.cookie = "APIKey=" + escape(APIKey) + "; path=/; expires=" + expiry.toGMTString();
+}
+
+function LoadCookie()
+{
+  if ( document.cookie.length > 0 )
+  {
+    var cookiedata = document.cookie.split(';');
+    // we want section 0, and then to take everything after the equals sign
+    var keysplit = cookiedata[0].split("=");
+    var APIKey = keysplit[1];
+    document.getElementById("APIKey").value = APIKey;
+  }
 }
 
 function GetTotalDailyAchievements( data )
