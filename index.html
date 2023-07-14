@@ -19,13 +19,34 @@
     <p id="data1" class="datadriven">I started the game on <span class="value">$VALUE1$</span> and have been playing for <span class="value">$VALUE2$</span> hours.</p>
     <p id="data2" class="datadriven">There are <span class="value">$VALUE1$</span> total achievements. Of those, I have completed <span class="value">$VALUE2$</span>.</p>
     <div id="chart1"></div>
-    <p id="data3" class="datadriven">Of the completed achievements, <span class="value">$VALUE1$</span> are non-repeatable. I have completed my dailies <span class="value">$VALUE2$</span> times.</p>
+    <p id="data3" class="datadriven">Of the non-completed achievements, <span class="value">$VALUE1$</span> are in-progress. I have completed my dailies <span class="value">$VALUE2$</span> times.</p>
   </div>
   <hr>
   <div id="fractals">
     <h2>Fractal Information</h3>
-    <p>Coming soon!</p>
     <p id="fractals1" class="datadriven">My highest Personal Fractal Level is <span class="value">$VALUE1$</span>. I have completed <span class="value">$VALUE2$</span> of the 100 total Fractal missions.</p>
+    <div class="row">
+      <div class="fractalcolumn">
+        <h3>Scale 1-25</h3>
+        <progress id="fractal1" value="0" max="100"></progress>
+        <p id="fractaldata1" class="datadriven">$VALUE1$% Complete</p>
+      </div>
+      <div class="fractalcolumn">
+        <h3>Scale 26-50</h3>
+        <progress id="fractal2" value="0" max="100"></progress>
+        <p id="fractaldata2" class="datadriven">$VALUE1$% Complete</p>
+      </div>
+      <div class="fractalcolumn">
+        <h3>Scale 51-75</h3>
+        <progress id="fractal3" value="0" max="100"></progress>
+        <p id="fractaldata3" class="datadriven">$VALUE1$% Complete</p>
+      </div>
+      <div class="fractalcolumn">
+        <h3>Scale 76-100</h3>
+        <progress id="fractal4" value="0" max="100"></progress>
+        <p id="fractaldata4" class="datadriven">$VALUE1$% Complete</p>
+      </div>
+    </div>
   </div>
   <hr>
   <div id="story">

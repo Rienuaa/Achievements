@@ -10,6 +10,10 @@ h3
 {
   text-align: center;
 }
+h4
+{
+  text-align: center;
+}
 p
 {
   text-align: center;
@@ -36,4 +40,23 @@ body
 .datadriven
 {
   display: none;
+}
+progress
+{
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.fractalcolumn {
+  float: left;
+  width: 25%;
+  display: none;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
