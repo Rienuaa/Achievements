@@ -3,6 +3,8 @@ var APIURL = "https://api.guildwars2.com/v2/";
 
 document.addEventListener('DOMContentLoaded', function() {
     LoadCookie();
+    
+    LoadMainAchievementData();
 }, false);
 
 async function ShowStats()
@@ -11,13 +13,9 @@ async function ShowStats()
   SaveCookie( APIKey );
   APIKey = APIKeyBase + APIKey;
   
-  let achievementIDs = await GetData("achievements");
-  
   let accountInfo = await GetData("account" + APIKey); 
   
   let accountAchievements = await GetData("account/achievements" + APIKey);
-  
-  let achievementData = await GetAchievementData(achievementIDs);
   
   // playtime and start date
   let date = new Date(accountInfo.created);
@@ -41,8 +39,6 @@ async function ShowStats()
   document.getElementById("data2").innerHTML = document.getElementById("data2").innerHTML.replace("$VALUE2$", earned);
   document.getElementById("data2").style.display = "block";
   
-  
-
   // nonrepeats and dailies
   let inprogress = GetInProgressAchievements( accountAchievements );
   let dailies = GetTotalDailyAchievements( accountInfo );
@@ -86,16 +82,32 @@ async function ShowStats()
   }
 }
 
+async function LoadMainAchievementData()
+{
+  // this is called when the page loads
+  achievementIDs = await GetData("achievements");
+  
+  achievementData = await GetAchievementData(achievementIDs);
+  
+  // we are done, hide the progress bar and label and show the API entry field
+  document.getElementById("APIText").style.display = "none";
+  document.getElementById("APIProgress").style.display = "none";
+  document.getElementById("APIInput").style.display = "block";
+}
+
 async function GetAchievementData( IDs )
 {
   // this does several combined ID calls to create a merged json file that's really long
   let achievements = await GetData("achievements?page=0&page_size=200");
   let iteration = Math.floor(IDs.length/200) + 1;
   
+  document.getElementById("APIProgress").max = iteration;
+  
   for (let i = 1; i < iteration; i++)
   {
     data = await GetData("achievements?page=" + i + "&page_size=200");
     achievements = achievements.concat(data);
+    document.getElementById("APIProgress").value = i;
   }
   
   return achievements;

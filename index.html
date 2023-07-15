@@ -11,7 +11,9 @@
 <body>
   <div class="header">
     <h1>Achievement Tracker</h1>
-    <p><input type="text" id="APIKey"><button type="button" OnClick="ShowStats()">Show Statistics</button></p>
+    <p id="APIInput"><input type="text" id="APIKey"><button type="button" OnClick="ShowStats()">Show Statistics</button></p>
+    <p id="APIText">Getting Achievement Data from API...</p>
+    <progress id="APIProgress" value="0" max="100"></progress>
   </div>
   <hr>
   <div id="datasection">
