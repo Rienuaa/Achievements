@@ -59,7 +59,7 @@ async function ShowStats()
   SetupEarnedAchievementGraph( undone, earned, inprogress );
   
   // fractals!
-  let fractalPercentages = FindAchievements( accountAchievements, fractalIDs );
+  let fractalPercentages = FindAchievements( accountAchievements, fractalIDs, false );
   
   document.getElementById("fractaldata1").innerHTML = document.getElementById("fractaldata1").innerHTML.replace("$VALUE1$", fractalPercentages[0]);
   document.getElementById("fractaldata1").style.display = "block";
@@ -86,7 +86,7 @@ async function ShowStats()
   // story journal!
   
   // season 1
-  let storyPercentages = FindAchievements( accountAchievements, storyMasteryIDs );
+  let storyPercentages = FindAchievements( accountAchievements, storyMasteryIDs, true );
   
   SetStoryBlock( storyPercentages[0], "LW1_1");
   SetStoryBlock( storyPercentages[1], "LW1_2");
@@ -148,6 +148,16 @@ async function ShowStats()
   SetStoryBlock( storyPercentages[43], "EOD_5"); 
   
   document.getElementById("storyinfo").style.display = "block";
+  
+  let earnedPoints = storyEarnedBits.reduce(Add);
+  let maxPoints = storyMaxBits.reduce(Add);
+  
+  SetupStoryMasteryGraph( earnedPoints, maxPoints );
+}
+
+function Add( num1, num2 )
+{
+  return num1 + num2;
 }
 
 function SetStoryBlock( value, textval )
@@ -192,7 +202,7 @@ async function GetAchievementData( IDs )
   return achievements;
 }
 
-function FindAchievements( accountdata, ids )
+function FindAchievements( accountdata, ids, IsStory )
 {
   let returns = new Array(ids.length).fill(0);
   
@@ -205,11 +215,19 @@ function FindAchievements( accountdata, ids )
         if ( accountdata[i].done == true )
         {
           returns[j] = 100;
+          if ( IsStory )
+          {
+            storyEarnedBits[j] = storyMaxBits[j];
+          }
         }
         else
         {
           let bits = accountdata[i].bits;
           returns[j] = Math.floor(100 * bits.length / accountdata[i].max);
+          if ( IsStory )
+          {
+            storyEarnedBits[j] = bits.length;
+          }
         }
       }
     }
@@ -239,11 +257,13 @@ function FindAchievement( accountdata, id )
   return 0;
 }
 
+var fractalIDs = [];
+var storyMasteryIDs = [];
+var storyMaxBits = [];
+var storyEarnedBits = [];
+
 function SetupAchievementIDs( data )
 {
-  fractalIDs = [];
-  storyMasteryIDs = [];
-  
   for (let i = 0; i < data.length; i++)
   {
     if ( data[i].name == "Fractal Initiate" )
@@ -266,185 +286,229 @@ function SetupAchievementIDs( data )
     else if ( data[i].name == "Flame and Frost Mastery" )
     {
       storyMasteryIDs[0] = data[i].id;
+      storyMaxBits[0] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Sky Pirates Mastery" )
     {
       storyMasteryIDs[1] = data[i].id;
+      storyMaxBits[1] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Clockwork Chaos Mastery" )
     {
       storyMasteryIDs[2] = data[i].id;
+      storyMaxBits[2] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Tower of Nightmares Mastery" )
     {
       storyMasteryIDs[3] = data[i].id;
+      storyMaxBits[3] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Battle for Lion's Arch Mastery" )
     {
       storyMasteryIDs[4] = data[i].id;
+      storyMaxBits[4] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // Living World Season 2
     else if ( data[i].name == "\"Gates of Maguuma\" Mastery" )
     {
       storyMasteryIDs[5] = data[i].id;
+      storyMaxBits[5] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Entanglement\" Mastery" )
     {
       storyMasteryIDs[6] = data[i].id;
+      storyMaxBits[6] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"The Dragon's Reach, Part 1\" Mastery" )
     {
       storyMasteryIDs[7] = data[i].id;
+      storyMaxBits[7] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"The Dragon's Reach, Part 2\" Mastery" )
     {
       storyMasteryIDs[8] = data[i].id;
+      storyMaxBits[8] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Echoes of the Past\" Mastery" )
     {
       storyMasteryIDs[9] = data[i].id;
+      storyMaxBits[9] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Tangled Paths\" Mastery" )
     {
       storyMasteryIDs[10] = data[i].id;
+      storyMaxBits[10] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Seeds of Truth\" Mastery" )
     {
       storyMasteryIDs[11] = data[i].id;
+      storyMaxBits[11] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Point of No Return\" Mastery" )
     {
       storyMasteryIDs[12] = data[i].id;
+      storyMaxBits[12] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // Heart of Thorns
     else if ( data[i].name == "Heart of Thorns Act I Mastery" )
     {
       storyMasteryIDs[13] = data[i].id;
+      storyMaxBits[13] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Heart of Thorns Act II Mastery" )
     {
       storyMasteryIDs[14] = data[i].id;
+      storyMaxBits[14] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Heart of Thorns Act III Mastery" )
     {
       storyMasteryIDs[15] = data[i].id;
+      storyMaxBits[15] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Heart of Thorns Act IV Mastery" )
     {
       storyMasteryIDs[16] = data[i].id;
+      storyMaxBits[16] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // Living World Season 3
     else if ( data[i].name == "\"Out of the Shadows\" Mastery" )
     {
       storyMasteryIDs[17] = data[i].id;
+      storyMaxBits[17] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Rising Flames\" Mastery" )
     {
       storyMasteryIDs[18] = data[i].id;
+      storyMaxBits[18] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"A Crack in the Ice\" Mastery" )
     {
       storyMasteryIDs[19] = data[i].id;
+      storyMaxBits[19] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"The Head of the Snake\" Mastery" )
     {
       storyMasteryIDs[20] = data[i].id;
+      storyMaxBits[20] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Flashpoint\" Mastery" )
     {
       storyMasteryIDs[21] = data[i].id;
+      storyMaxBits[21] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"One Path Ends\" Mastery" )
     {
       storyMasteryIDs[22] = data[i].id;
+      storyMaxBits[22] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // Path of Fire
     else if ( data[i].name == "Path of Fire: Act 1 Mastery" )
     {
       storyMasteryIDs[23] = data[i].id;
+      storyMaxBits[23] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Path of Fire: Act 2 Mastery" )
     {
       storyMasteryIDs[24] = data[i].id;
+      storyMaxBits[24] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Path of Fire: Act 3 Mastery" )
     {
       storyMasteryIDs[25] = data[i].id;
+      storyMaxBits[25] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // Living World Season 4
     else if ( data[i].name == "\"Daybreak\" Mastery" )
     {
       storyMasteryIDs[26] = data[i].id;
+      storyMaxBits[26] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"A Bug in the System\" Mastery" )
     {
       storyMasteryIDs[27] = data[i].id;
+      storyMaxBits[27] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Long Live the Lich\" Mastery" )
     {
       storyMasteryIDs[28] = data[i].id;
+      storyMaxBits[28] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"A Star to Guide Us\" Mastery" )
     {
       storyMasteryIDs[29] = data[i].id;
+      storyMaxBits[29] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"All or Nothing\" Mastery" )
     {
       storyMasteryIDs[30] = data[i].id;
+      storyMaxBits[30] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"War Eternal\" Mastery" )
     {
       storyMasteryIDs[31] = data[i].id;
+      storyMaxBits[31] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // Icebrood Saga
     else if ( data[i].name == "\"Bound by Blood\" Mastery" )
     {
       storyMasteryIDs[32] = data[i].id;
+      storyMaxBits[32] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Whisper in the Dark Mastery" )
     {
       storyMasteryIDs[33] = data[i].id;
+      storyMaxBits[33] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Shadow in the Ice\" Mastery" )
     {
       storyMasteryIDs[34] = data[i].id;
+      storyMaxBits[34] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "Steel and Fire Mastery" )
     {
       storyMasteryIDs[35] = data[i].id;
+      storyMaxBits[35] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"No Quarter\" Mastery" )
     {
       storyMasteryIDs[36] = data[i].id;
+      storyMaxBits[36] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Jormag Rising\" Mastery" )
     {
       storyMasteryIDs[37] = data[i].id;
+      storyMaxBits[37] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "\"Champions\" Mastery" )
     {
       storyMasteryIDs[38] = data[i].id;
+      storyMaxBits[38] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     // End of Dragons
     else if ( data[i].name == "End of Dragons: Act 1 Mastery" )
     {
       storyMasteryIDs[39] = data[i].id;
+      storyMaxBits[39] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "End of Dragons: Act 2 Mastery" )
     {
       storyMasteryIDs[40] = data[i].id;
+      storyMaxBits[40] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "End of Dragons: Act 3 Mastery" )
     {
       storyMasteryIDs[41] = data[i].id;
+      storyMaxBits[41] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "End of Dragons: Act 4 Mastery" )
     {
       storyMasteryIDs[42] = data[i].id;
+      storyMaxBits[42] = data[i].tiers[data[i].tiers.length - 1].count;
     }
     else if ( data[i].name == "End of Dragons: Act 5 Mastery" )
     {
       storyMasteryIDs[43] = data[i].id;
+      storyMaxBits[43] = data[i].tiers[data[i].tiers.length - 1].count;
     }
   }
 }
@@ -514,15 +578,69 @@ function SetupEarnedAchievementGraph( unearned, earned, inprogress )
         colorByPoint: true,
         data: [{
             name: 'Not Done',
+            color: '#1f4ce0',
             y: unearned,
         }, 
         {
             name: 'In Progress',
+            color: '#1f80e0',
             y: inprogress
         }, 
         {
             name: 'Done',
+            color: '#03bafc',
             y: earned
+        }]
+    }]
+  });
+}
+
+function SetupStoryMasteryGraph( earned, max )
+{
+  let earnedPercent = earned / max;
+  let unearnedPercent = (max - earned) / max;
+  
+  var chart = Highcharts.chart('chart2', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Story Mastery Percentage Completed',
+        align: 'center'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+        name: 'Story Journal Achievements',
+        colorByPoint: true,
+        data: [{
+            name: 'Done',
+            color: '#03bafc',
+            y: earnedPercent
+        }, 
+        {
+            name: 'Not Done',
+            color: '#1f4ce0',
+            y: unearnedPercent
         }]
     }]
   });
