@@ -48,6 +48,13 @@ progress
   margin-right: 10%;
 }
 
+.storyprogress
+{
+  width: 25%;
+  margin-left: 0%;
+  margin-right: 0%;
+}
+
 .fractalcolumn {
   float: left;
   width: 25%;
@@ -64,4 +71,56 @@ progress
 #APIInput
 {
   display: none;
+}
+
+.helper
+{
+  vertical-align: middle;
+}
+
+.story
+{
+  float: center;
+  text-align: center;
+  width: 100%;
+}
+
+.LW1
+{
+  background-color: #fc4949;
+}
+
+.LW2
+{
+  background-color: #c92424;
+}
+
+.HOT
+{
+  background-color: #3aba53;
+}
+
+.LW3
+{
+  background-color: #289c28;
+}
+
+.POF
+{
+  background-color: #7e44c9;
+}
+
+.LW4
+{
+  background-color: #885bc2;
+}
+
+.LW5
+{
+  background-color: #51cfe8;
+}
+
+.EOD
+{
+  background-color: #40aae3;
 }
