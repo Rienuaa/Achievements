@@ -146,6 +146,8 @@ async function ShowStats()
   SetStoryBlock( storyPercentages[41], "EOD_3");
   SetStoryBlock( storyPercentages[42], "EOD_4");
   SetStoryBlock( storyPercentages[43], "EOD_5"); 
+  
+  document.getElementById("storyinfo").style.display = "block";
 }
 
 function SetStoryBlock( value, textval )
