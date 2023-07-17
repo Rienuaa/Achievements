@@ -576,21 +576,23 @@ function SetupEarnedAchievementGraph( unearned, earned, inprogress )
     series: [{
         name: 'Achievements',
         colorByPoint: true,
-        data: [{
-            name: 'Not Done',
-            color: '#1f4ce0',
-            y: unearned,
-        }, 
-        {
-            name: 'In Progress',
-            color: '#1f80e0',
-            y: inprogress
-        }, 
-        {
+        data: [
+          {
             name: 'Done',
             color: '#03bafc',
             y: earned
-        }]
+          },
+          {
+            name: 'In Progress',
+            color: '#1f80e0',
+            y: inprogress
+          }, 
+          {
+            name: 'Not Done',
+            color: '#1f4ce0',
+            y: unearned,
+          } 
+        ]
     }]
   });
 }
