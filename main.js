@@ -4,8 +4,19 @@ var APIURL = "https://api.guildwars2.com/v2/";
 document.addEventListener('DOMContentLoaded', function() {
     LoadCookie();
     
-    LoadMainAchievementData();
+    LoadData();
 }, false);
+
+async function LoadData()
+{
+  let data = await LoadMainAchievementData();
+    
+  data = await LoadMainDyeData();
+  
+  // we are done, hide the progress bar and label and show the API entry field
+  document.getElementById("APIProgress").style.display = "none";
+  document.getElementById("APIInput").style.display = "block";
+}
 
 async function ShowStats()
 {
@@ -153,7 +164,72 @@ async function ShowStats()
   let maxPoints = storyMaxBits.reduce(Add);
   
   SetupStoryMasteryGraph( earnedPoints, maxPoints );
+  
+  // dyes!
+  
+  let accountDyes = await GetData("account/dyes" + APIKey);
+  
+  let dyeCounts = SortDyes( dyeData, accountDyes );
+  
+  let totalDyes = colorIDs.length;
+  
+  let earnedDyes = accountDyes.length;
+  
+  document.getElementById("cosmetics1").innerHTML = document.getElementById("cosmetics1").innerHTML.replace("$VALUE1$", totalDyes);
+  document.getElementById("cosmetics1").innerHTML = document.getElementById("cosmetics1").innerHTML.replace("$VALUE2$", earnedDyes);
+  document.getElementById("cosmetics1").style.display = "block";
+  
+  SetupDyePercentageGraph( totalDyes, dyeCounts );
 }
+
+function SortDyes( data, accountData )
+{
+  let dyes = [ 0, 0, 0, 0, 0 ];
+  
+  for (let i = 0; i < data.length; i++)
+  {
+    for ( let j = 0; j < data[i].categories.length; j++ )
+    {
+      if ( data[i].categories[j] == "Starter" )
+      {
+        if ( accountData.includes( data[i].id ) )
+        {
+          dyes[0]++;
+        }
+      }
+      else if ( data[i].categories[j] == "Common" )
+      {
+        if ( accountData.includes( data[i].id ) )
+        {
+          dyes[1]++;
+        }
+      }
+      else if ( data[i].categories[j] == "Uncommon" )
+      {
+        if ( accountData.includes( data[i].id ) )
+        {
+          dyes[2]++;
+        }
+      }
+      else if ( data[i].categories[j] == "Rare" )
+      {
+        if ( accountData.includes( data[i].id ) )
+        {
+          dyes[3]++;
+        }
+      }
+      else if ( data[i].categories[j] == "Exclusive" )
+      {
+        if ( accountData.includes( data[i].id ) )
+        {
+          dyes[4]++;
+        }
+      }
+    }
+  }
+  
+  return dyes;
+} 
 
 function Add( num1, num2 )
 {
@@ -174,14 +250,25 @@ function SetStoryBlock( value, textval )
 async function LoadMainAchievementData()
 {
   // this is called when the page loads
+  document.getElementById("APIText1").style.display = "block";
+  
   achievementIDs = await GetData("achievements");
   
   achievementData = await GetAchievementData(achievementIDs);
   
-  // we are done, hide the progress bar and label and show the API entry field
-  document.getElementById("APIText").style.display = "none";
-  document.getElementById("APIProgress").style.display = "none";
-  document.getElementById("APIInput").style.display = "block";
+  document.getElementById("APIText1").style.display = "none";
+}
+
+async function LoadMainDyeData()
+{
+  // this is called when the page loads
+  document.getElementById("APIText2").style.display = "block";
+  
+  colorIDs = await GetData("colors");
+  
+  dyeData = await GetDyeData(colorIDs);
+  
+  document.getElementById("APIText2").style.display = "none";
 }
 
 async function GetAchievementData( IDs )
@@ -200,6 +287,24 @@ async function GetAchievementData( IDs )
   }
   
   return achievements;
+}
+
+async function GetDyeData( IDs )
+{
+  // this does several combined ID calls to create a merged json file that's really long
+  let dyes = await GetData("colors?page=0&page_size=200");
+  let iteration = Math.floor(IDs.length/200) + 1;
+  
+  document.getElementById("APIProgress").max = iteration;
+  
+  for (let i = 1; i < iteration; i++)
+  {
+    data = await GetData("colors?page=" + i + "&page_size=200");
+    dyes = dyes.concat(data);
+    document.getElementById("APIProgress").value = i;
+  }
+  
+  return dyes;
 }
 
 function FindAchievements( accountdata, ids, IsStory )
@@ -643,6 +748,81 @@ function SetupStoryMasteryGraph( earned, max )
             name: 'Not Done',
             color: '#1f4ce0',
             y: unearnedPercent
+        }]
+    }]
+  });
+}
+
+function SetupDyePercentageGraph( totalDyes, dyeCounts )
+{
+  let starterPercentage = dyeCounts[0] / totalDyes;
+  let commonPercentage = dyeCounts[1] / totalDyes;
+  let uncommonPercentage = dyeCounts[2] / totalDyes;
+  let rarePercentage = dyeCounts[3] / totalDyes;
+  let exclusivePercentage = dyeCounts[4] / totalDyes;
+  let missingPercentage = ( totalDyes - dyeCounts.reduce(Add) ) / totalDyes;
+  
+  var chart = Highcharts.chart('chart3', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Dye Colors Percentage Completed',
+        align: 'center'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+        name: 'Dyes Acquired',
+        colorByPoint: true,
+        data: [{
+            name: 'Starter',
+            color: '#f71f07',
+            y: starterPercentage
+        }, 
+        {
+            name: 'Common',
+            color: '#047dd4',
+            y: commonPercentage
+        }, 
+        {
+            name: 'Uncommon',
+            color: '#04b521',
+            y: uncommonPercentage
+        }, 
+        {
+            name: 'Rare',
+            color: '#faf21b',
+            y: rarePercentage
+        }, 
+        {
+            name: 'Exclusive',
+            color: '#391bfa',
+            y: exclusivePercentage
+        }, 
+        {
+            name: 'Unearned',
+            color: '#c4c2c2',
+            y: missingPercentage
         }]
     }]
   });

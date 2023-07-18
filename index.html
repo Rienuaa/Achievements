@@ -12,12 +12,13 @@
   <div class="header">
     <h1>Achievement Tracker</h1>
     <p id="APIInput"><input type="text" id="APIKey"><button type="button" OnClick="ShowStats()">Show Statistics</button></p>
-    <p id="APIText">Getting Achievement Data from API...</p>
+    <p id="APIText1">Getting Achievement Data from API...</p>
+    <p id="APIText2">Getting Dye Data from API...</p>
     <progress id="APIProgress" value="0" max="100"></progress>
   </div>
   <hr>
   <div id="datasection">
-    <h2>Account Information</h2>
+    <h2>Achievements</h2>
     <p id="data1" class="datadriven">I started the game on <span class="value">$VALUE1$</span> and have been playing for <span class="value">$VALUE2$</span> hours.</p>
     <p id="data2" class="datadriven">There are <span class="value">$VALUE1$</span> total achievements. Of those, I have completed <span class="value">$VALUE2$</span>.</p>
     <div id="chart1"></div>
@@ -25,7 +26,7 @@
   </div>
   <hr>
   <div id="fractals">
-    <h2>Fractal Information</h2>
+    <h2>Fractals</h2>
     <p id="fractals1" class="datadriven">My highest Personal Fractal Level is <span class="value">$VALUE1$</span>. I have completed <span class="value">$VALUE2$</span> of the 100 total Fractal missions.</p>
     <div class="row">
       <div class="fractalcolumn">
@@ -52,7 +53,7 @@
   </div>
   <hr>
   <div id="story">
-    <h2>Story Information</h2>
+    <h2>Story</h2>
     <div id="chart2"></div>
     <!--
     <h3>Personal Story</h3>
@@ -244,5 +245,11 @@
         <span class="helper" id="Text_EOD_5">5: End of Dragons: Act V: $VALUE1$% <progress class="storyprogress" id="Progress_EOD_5" value="0" max="100"></progress></span>
       </div>
     </div>
+  </div>
+  <hr>
+  <div id="cosmetics">
+    <h2>Cosmetics</h2>
+    <p id="cosmetics1" class="datadriven">There are <span class="value">$VALUE1$</span> dyes within the game, and I have collected <span class="value">$VALUE2$</span> of them.</p>
+    <div id="chart3"></div>
   </div>
 </body>
