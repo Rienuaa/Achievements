@@ -10,11 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
 async function LoadData()
 {
   let data = await LoadMainAchievementData();
-    
+
   data = await LoadMainDyeData();
   
-  // we are done, hide the progress bar and label and show the API entry field
-  document.getElementById("APIProgress").style.display = "none";
+  // we are done, show the API entry field
   document.getElementById("APIInput").style.display = "block";
 }
 
@@ -158,12 +157,22 @@ async function ShowStats()
   SetStoryBlock( storyPercentages[42], "EOD_4");
   SetStoryBlock( storyPercentages[43], "EOD_5"); 
   
+  // secrets of the obscure
+  SetStoryBlock( storyPercentages[44], "SOTO_1");
+  SetStoryBlock( storyPercentages[45], "SOTO_2");
+  SetStoryBlock( storyPercentages[46], "SOTO_3");
+  
   document.getElementById("storyinfo").style.display = "block";
   
   let earnedPoints = storyEarnedBits.reduce(Add);
   let maxPoints = storyMaxBits.reduce(Add);
   
   SetupStoryMasteryGraph( earnedPoints, maxPoints );
+  
+  document.getElementById("story1").innerHTML = document.getElementById("story1").innerHTML.replace("$VALUE1$", maxPoints);
+  document.getElementById("story1").innerHTML = document.getElementById("story1").innerHTML.replace("$VALUE2$", earnedPoints);
+  document.getElementById("story1").style.display = "block";
+  
   
   // dyes!
   
@@ -180,6 +189,101 @@ async function ShowStats()
   document.getElementById("cosmetics1").style.display = "block";
   
   SetupDyePercentageGraph( totalDyes, dyeCounts );
+  
+  // masteries!
+  
+  let accountMasteries = await GetData("account/mastery/points" + APIKey);
+  
+  let earnedMasteryTotal = GetEarnedMasteryPoints( accountMasteries );
+  let earnedMasteryMax = 667;
+  let spentMasteryTotal = GetSpentMasteryPoints( accountMasteries );
+  let spentMasteryMax = 514;
+  
+  document.getElementById("masteries1").innerHTML = document.getElementById("masteries1").innerHTML.replace("$VALUE1$", earnedMasteryTotal.reduce(Add) );
+  document.getElementById("masteries1").innerHTML = document.getElementById("masteries1").innerHTML.replace("$VALUE2$", earnedMasteryMax );
+  document.getElementById("masteries1").style.display = "block";
+  
+  document.getElementById("masteries2").innerHTML = document.getElementById("masteries2").innerHTML.replace("$VALUE1$", spentMasteryTotal.reduce(Add) );
+  document.getElementById("masteries2").innerHTML = document.getElementById("masteries2").innerHTML.replace("$VALUE2$", spentMasteryMax );
+  document.getElementById("masteries2").style.display = "block";
+  
+  SetupMasteryPercentageGraph( spentMasteryTotal, spentMasteryMax );
+}
+
+function GetEarnedMasteryPoints( data )
+{
+  // this returns a list of earned points by region
+  let points = [ 0, 0, 0, 0, 0, 0 ];
+  
+  let totals = data.totals;
+  
+  for ( let i = 0; i < totals.length; i++ )
+  {
+    if ( totals[i].region == "Central Tyria" )
+    {
+      points[0] = totals[i].earned;
+    }
+    else if ( totals[i].region == "Heart of Thorns" )
+    {
+      points[1] = totals[i].earned;
+    }
+    else if ( totals[i].region == "Path of Fire" )
+    {
+      points[2] = totals[i].earned;
+    }
+    else if ( totals[i].region == "End of Dragons" )
+    {
+      points[3] = totals[i].earned;
+    }
+    else if ( totals[i].region == "Icebrood Saga" )
+    {
+      points[4] = totals[i].earned;
+    }
+    else if ( totals[i].region == "Secrets of the Obscure" )
+    {
+      points[5] = totals[i].earned;
+    }
+  }
+  
+  return points;
+}
+
+function GetSpentMasteryPoints( data )
+{
+  // this returns a list of spent points by region
+  let points = [ 0, 0, 0, 0, 0, 0 ];
+  
+  let totals = data.totals;
+  
+  for ( let i = 0; i < totals.length; i++ )
+  {
+    if ( totals[i].region == "Central Tyria" )
+    {
+      points[0] = totals[i].spent;
+    }
+    else if ( totals[i].region == "Heart of Thorns" )
+    {
+      points[1] = totals[i].spent;
+    }
+    else if ( totals[i].region == "Path of Fire" )
+    {
+      points[2] = totals[i].spent;
+    }
+    else if ( totals[i].region == "End of Dragons" )
+    {
+      points[3] = totals[i].spent;
+    }
+    else if ( totals[i].region == "Icebrood Saga" )
+    {
+      points[4] = totals[i].spent;
+    }
+    else if ( totals[i].region == "Secrets of the Obscure" )
+    {
+      points[5] = totals[i].spent;
+    }
+  }
+  
+  return points;
 }
 
 function SortDyes( data, accountData )
@@ -250,24 +354,28 @@ function SetStoryBlock( value, textval )
 async function LoadMainAchievementData()
 {
   // this is called when the page loads
+  document.getElementById("APIProgress1").style.display = "block";
   document.getElementById("APIText1").style.display = "block";
   
   achievementIDs = await GetData("achievements");
   
   achievementData = await GetAchievementData(achievementIDs);
   
+  document.getElementById("APIProgress1").style.display = "none";
   document.getElementById("APIText1").style.display = "none";
 }
 
 async function LoadMainDyeData()
 {
   // this is called when the page loads
+  document.getElementById("APIProgress2").style.display = "block";
   document.getElementById("APIText2").style.display = "block";
   
   colorIDs = await GetData("colors");
   
   dyeData = await GetDyeData(colorIDs);
   
+  document.getElementById("APIProgress2").style.display = "none";
   document.getElementById("APIText2").style.display = "none";
 }
 
@@ -277,13 +385,13 @@ async function GetAchievementData( IDs )
   let achievements = await GetData("achievements?page=0&page_size=200");
   let iteration = Math.floor(IDs.length/200) + 1;
   
-  document.getElementById("APIProgress").max = iteration;
+  document.getElementById("APIProgress1").max = iteration;
   
   for (let i = 1; i < iteration; i++)
   {
     data = await GetData("achievements?page=" + i + "&page_size=200");
     achievements = achievements.concat(data);
-    document.getElementById("APIProgress").value = i;
+    document.getElementById("APIProgress1").value = i;
   }
   
   return achievements;
@@ -295,13 +403,13 @@ async function GetDyeData( IDs )
   let dyes = await GetData("colors?page=0&page_size=200");
   let iteration = Math.floor(IDs.length/200) + 1;
   
-  document.getElementById("APIProgress").max = iteration;
+  document.getElementById("APIProgress2").max = iteration;
   
   for (let i = 1; i < iteration; i++)
   {
     data = await GetData("colors?page=" + i + "&page_size=200");
     dyes = dyes.concat(data);
-    document.getElementById("APIProgress").value = i;
+    document.getElementById("APIProgress2").value = i;
   }
   
   return dyes;
@@ -615,6 +723,21 @@ function SetupAchievementIDs( data )
       storyMasteryIDs[43] = data[i].id;
       storyMaxBits[43] = data[i].tiers[data[i].tiers.length - 1].count;
     }
+    else if ( data[i].name == "Secrets of the Obscure: Act 1 Mastery" )
+    {
+      storyMasteryIDs[44] = data[i].id;
+      storyMaxBits[44] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+    else if ( data[i].name == "Secrets of the Obscure: Act 2 Mastery" )
+    {
+      storyMasteryIDs[45] = data[i].id;
+      storyMaxBits[45] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+    else if ( data[i].name == "Secrets of the Obscure: Act 3 Mastery" )
+    {
+      storyMasteryIDs[46] = data[i].id;
+      storyMaxBits[46] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
   }
 }
 
@@ -748,6 +871,87 @@ function SetupStoryMasteryGraph( earned, max )
             name: 'Not Done',
             color: '#1f4ce0',
             y: unearnedPercent
+        }]
+    }]
+  });
+}
+
+function SetupMasteryPercentageGraph( pointTotals, maximum )
+{
+  let main = pointTotals[0] / maximum;
+  let HOT = pointTotals[1] / maximum;
+  let POF = pointTotals[2] / maximum;
+  let IBS = pointTotals[3] / maximum;
+  let EOD = pointTotals[4] / maximum;
+  let SOTO = pointTotals[5] / maximum;
+  let missingPercentage = ( maximum - pointTotals.reduce(Add) ) / maximum;
+  
+  var chart = Highcharts.chart('chart4', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Mastery Level Earned',
+        align: 'center'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+    },
+    series: [{
+        name: 'Mastery Level',
+        colorByPoint: true,
+        data: [{
+            name: 'Central Tyria',
+            color: '#c92424',
+            y: main
+        }, 
+        {
+            name: 'Heart of Thorns',
+            color: '#3aba53',
+            y: HOT
+        }, 
+        {
+            name: 'Path of Fire',
+            color: '#7e44c9',
+            y: POF
+        }, 
+        {
+            name: 'Icebrood Saga',
+            color: '#51cfe8',
+            y: IBS
+        }, 
+        {
+            name: 'End of Dragons',
+            color: '#40aae3',
+            y: EOD
+        }, 
+        {
+            name: 'Secrets of the Obscure',
+            color: '#ffc338',
+            y: SOTO
+        }, 
+        {
+            name: 'Unearned',
+            color: '#c4c2c2',
+            y: missingPercentage
         }]
     }]
   });

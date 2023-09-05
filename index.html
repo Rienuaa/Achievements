@@ -13,8 +13,9 @@
     <h1>Achievement Tracker</h1>
     <p id="APIInput"><input type="text" id="APIKey"><button type="button" OnClick="ShowStats()">Show Statistics</button></p>
     <p id="APIText1">Getting Achievement Data from API...</p>
+    <progress id="APIProgress1" value="0" max="100"></progress>
     <p id="APIText2">Getting Dye Data from API...</p>
-    <progress id="APIProgress" value="0" max="100"></progress>
+    <progress id="APIProgress2" value="0" max="100"></progress>
   </div>
   <hr>
   <div id="datasection">
@@ -52,13 +53,17 @@
     </div>
   </div>
   <hr>
+  <div id="masteries">
+    <h2>Masteries</h2>
+    <div id="chart4"></div>
+    <p id="masteries1" class="datadriven">I have earned <span class="value">$VALUE1$</span> total mastery points out of the max of <span class="value">$VALUE2$</span>.</p>
+    <p id="masteries2" class="datadriven">My mastery level is <span class="value">$VALUE1$</span>, out of the max of <span class="value">$VALUE2$</span>.</p>
+  </div>
+  <hr>
   <div id="story">
     <h2>Story</h2>
     <div id="chart2"></div>
-    <!--
-    <h3>Personal Story</h3>
-    <p id="story1" class="datadriven">Of the <span class="value">$VALUE1$</span> individual story missions, I have completed <span class="value">$VALUE2$</span>.</p>
-    -->
+    <p id="story1" class="datadriven">Of the <span class="value">$VALUE1$</span> individual story achievements, I have completed <span class="value">$VALUE2$</span>.</p>
     <div id="storyinfo">
       <h3 class="LW1">Living World Season 1</h3>
       <div class="story datadriven" id="Div_LW1_1">
@@ -244,12 +249,25 @@
         <span class="helper"><img id="Image_EOD_5" src="assets/cb-unchecked-active.png"/></span>
         <span class="helper" id="Text_EOD_5">5: End of Dragons: Act V: $VALUE1$% <progress class="storyprogress" id="Progress_EOD_5" value="0" max="100"></progress></span>
       </div>
+      <h3 class="SOTO">Secrets of the Obscure</h3>
+      <div class="story datadriven" id="Div_SOTO_1">
+        <span class="helper"><img id="Image_SOTO_1" src="assets/cb-unchecked-active.png"/></span>
+        <span class="helper" id="Text_SOTO_1">1: Secrets of the Obscure: Act I: $VALUE1$% <progress class="storyprogress" id="Progress_SOTO_1" value="0" max="100"></progress></span>
+      </div>
+      <div class="story datadriven" id="Div_SOTO_2">
+        <span class="helper"><img id="Image_SOTO_2" src="assets/cb-unchecked-active.png"/></span>
+        <span class="helper" id="Text_SOTO_2">2: Secrets of the Obscure: Act II: $VALUE1$% <progress class="storyprogress" id="Progress_SOTO_2" value="0" max="100"></progress></span>
+      </div>
+      <div class="story datadriven" id="Div_SOTO_3">
+        <span class="helper"><img id="Image_SOTO_3" src="assets/cb-unchecked-active.png"/></span>
+        <span class="helper" id="Text_SOTO_3">3: Secrets of the Obscure: Act III: $VALUE1$% <progress class="storyprogress" id="Progress_SOTO_3" value="0" max="100"></progress></span>
+      </div>
     </div>
   </div>
   <hr>
   <div id="cosmetics">
     <h2>Cosmetics</h2>
-    <p id="cosmetics1" class="datadriven">There are <span class="value">$VALUE1$</span> dyes within the game, and I have collected <span class="value">$VALUE2$</span> of them.</p>
     <div id="chart3"></div>
+    <p id="cosmetics1" class="datadriven">There are <span class="value">$VALUE1$</span> dyes within the game, and I have collected <span class="value">$VALUE2$</span> of them.</p>
   </div>
 </body>
