@@ -382,16 +382,34 @@ async function LoadMainDyeData()
 async function GetAchievementData( IDs )
 {
   // this does several combined ID calls to create a merged json file that's really long
-  let achievements = await GetData("achievements?page=0&page_size=200");
-  let iteration = Math.floor(IDs.length/200);
-  
+  let iteration = IDs.length;
   document.getElementById("APIProgress1").max = iteration;
   
-  for (let i = 1; i < iteration; i++)
+  let workingIDs = [];
+  
+  let achievementSections = [];
+  
+  for (let i = 0; i < iteration; i++)
   {
-    data = await GetData("achievements?page=" + i + "&page_size=200");
-    achievements = achievements.concat(data);
+    workingIDs.push(IDs[i]);
+    
+    if ( workingIDs.length >= 200 )
+    {
+      let id_csv = workingIDs.toString();
+      data = await GetData("achievements?ids=" + id_csv);
+      achievementSections.push(data);
+      
+      workingIDs = [];
+    }
+    
     document.getElementById("APIProgress1").value = i;
+  }
+  
+  let achievements = achievementSections[0];
+  
+  for (let i = 1; i < achievementSections.length; i++)
+  {
+    achievements = achievements.concat(achievementSections[i]);
   }
   
   return achievements;
@@ -400,16 +418,34 @@ async function GetAchievementData( IDs )
 async function GetDyeData( IDs )
 {
   // this does several combined ID calls to create a merged json file that's really long
-  let dyes = await GetData("colors?page=0&page_size=200");
-  let iteration = Math.floor(IDs.length/200);
-  
+  let iteration = IDs.length;
   document.getElementById("APIProgress2").max = iteration;
   
-  for (let i = 1; i < iteration; i++)
+  let workingIDs = [];
+  
+  let dyeSections = [];
+  
+  for (let i = 0; i < iteration; i++)
   {
-    data = await GetData("colors?page=" + i + "&page_size=200");
-    dyes = dyes.concat(data);
-    document.getElementById("APIProgress2").value = i;
+    workingIDs.push(IDs[i]);
+    
+    if ( workingIDs.length >= 200 )
+    {
+      let id_csv = workingIDs.toString();
+      data = await GetData("colors?ids=" + id_csv);
+      dyeSections.push(data);
+      
+      workingIDs = [];
+    }
+    
+    document.getElementById("APIProgress1").value = i;
+  }
+  
+  let dyes = dyeSections[0];
+  
+  for (let i = 1; i < dyeSections.length; i++)
+  {
+    dyes = dyes.concat(dyeSections[i]);
   }
   
   return dyes;
