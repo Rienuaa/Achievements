@@ -382,14 +382,14 @@ async function LoadMainDyeData()
 async function GetAchievementData( IDs )
 {
   // this does several combined ID calls to create a merged json file that's really long
-  let achievements = await GetData("achievements?page=0?page_size=200");
-  let iteration = Math.floor(IDs.length/200) + 1;
+  let achievements = await GetData("achievements?page=0&page_size=200");
+  let iteration = Math.floor(IDs.length/200);
   
   document.getElementById("APIProgress1").max = iteration;
   
   for (let i = 1; i < iteration; i++)
   {
-    data = await GetData("achievements?page=" + i + "?page_size=200");
+    data = await GetData("achievements?page=" + i + "&page_size=200");
     achievements = achievements.concat(data);
     document.getElementById("APIProgress1").value = i;
   }
@@ -401,7 +401,7 @@ async function GetDyeData( IDs )
 {
   // this does several combined ID calls to create a merged json file that's really long
   let dyes = await GetData("colors?page=0&page_size=200");
-  let iteration = Math.floor(IDs.length/200) + 1;
+  let iteration = Math.floor(IDs.length/200);
   
   document.getElementById("APIProgress2").max = iteration;
   
