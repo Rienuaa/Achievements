@@ -93,6 +93,13 @@ async function ShowStats()
     columns[i].style.display = "block";
   }
   
+  let fractallevel = accountInfo.fractal_level;
+  let totalfractals = ( fractalPercentages[0] + fractalPercentages[1] + fractalPercentages[2] + fractalPercentages[3] ) / 4;
+  
+  document.getElementById("fractals1").innerHTML = document.getElementById("fractals1").innerHTML.replace("$VALUE1$", fractallevel);
+  document.getElementById("fractals1").innerHTML = document.getElementById("fractals1").innerHTML.replace("$VALUE2$", totalfractals);
+  document.getElementById("fractals1").style.display = "block";
+  
   // story journal!
   
   // season 1
