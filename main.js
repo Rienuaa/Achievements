@@ -400,7 +400,7 @@ async function GetAchievementData( IDs )
   {
     workingIDs.push(IDs[i]);
     
-    if ( workingIDs.length >= 200 )
+    if ( workingIDs.length >= 200 || i == iteration - 1 )
     {
       let id_csv = workingIDs.toString();
       data = await GetData("achievements?ids=" + id_csv);
