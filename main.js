@@ -238,11 +238,11 @@ function GetEarnedMasteryPoints( data )
     {
       points[2] = totals[i].earned;
     }
-    else if ( totals[i].region == "End of Dragons" )
+    else if ( totals[i].region == "Icebrood Saga" )
     {
       points[3] = totals[i].earned;
     }
-    else if ( totals[i].region == "Icebrood Saga" )
+    else if ( totals[i].region == "End of Dragons" )
     {
       points[4] = totals[i].earned;
     }
@@ -276,11 +276,11 @@ function GetSpentMasteryPoints( data )
     {
       points[2] = totals[i].spent;
     }
-    else if ( totals[i].region == "End of Dragons" )
+    else if ( totals[i].region == "Icebrood Saga" )
     {
       points[3] = totals[i].spent;
     }
-    else if ( totals[i].region == "Icebrood Saga" )
+    else if ( totals[i].region == "End of Dragons" )
     {
       points[4] = totals[i].spent;
     }
