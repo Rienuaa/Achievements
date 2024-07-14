@@ -168,6 +168,9 @@ async function ShowStats()
   SetStoryBlock( storyPercentages[44], "SOTO_1");
   SetStoryBlock( storyPercentages[45], "SOTO_2");
   SetStoryBlock( storyPercentages[46], "SOTO_3");
+  SetStoryBlock( storyPercentages[47], "SOTO_4");
+  SetStoryBlock( storyPercentages[48], "SOTO_5");
+  SetStoryBlock( storyPercentages[49], "SOTO_6");
   
   document.getElementById("storyinfo").style.display = "block";
   
@@ -780,6 +783,21 @@ function SetupAchievementIDs( data )
     {
       storyMasteryIDs[46] = data[i].id;
       storyMaxBits[46] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Secrets of the Obscure: Through the Veil Mastery" )
+    {
+      storyMasteryIDs[47] = data[i].id;
+      storyMaxBits[47] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Secrets of the Obscure: The Realm of Dreams Mastery" )
+    {
+      storyMasteryIDs[48] = data[i].id;
+      storyMaxBits[48] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Secrets of the Obscure: The Midnight King Mastery" )
+    {
+      storyMasteryIDs[49] = data[i].id;
+      storyMaxBits[49] = data[i].tiers[data[i].tiers.length - 1].count;
     }
   }
 }
