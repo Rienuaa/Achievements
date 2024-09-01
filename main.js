@@ -164,13 +164,21 @@ async function ShowStats()
   SetStoryBlock( storyPercentages[42], "EOD_4");
   SetStoryBlock( storyPercentages[43], "EOD_5"); 
   
+  // interlude
+  SetStoryBlock( storyPercentages[44], "EOD_6");
+  SetStoryBlock( storyPercentages[45], "EOD_7"); 
+  
   // secrets of the obscure
-  SetStoryBlock( storyPercentages[44], "SOTO_1");
-  SetStoryBlock( storyPercentages[45], "SOTO_2");
-  SetStoryBlock( storyPercentages[46], "SOTO_3");
-  SetStoryBlock( storyPercentages[47], "SOTO_4");
-  SetStoryBlock( storyPercentages[48], "SOTO_5");
-  SetStoryBlock( storyPercentages[49], "SOTO_6");
+  SetStoryBlock( storyPercentages[46], "SOTO_1");
+  SetStoryBlock( storyPercentages[47], "SOTO_2");
+  SetStoryBlock( storyPercentages[48], "SOTO_3");
+  SetStoryBlock( storyPercentages[49], "SOTO_4");
+  SetStoryBlock( storyPercentages[50], "SOTO_5");
+  SetStoryBlock( storyPercentages[51], "SOTO_6");
+  
+  // janthir Wilds
+  SetStoryBlock( storyPercentages[52], "JW_1");
+  SetStoryBlock( storyPercentages[53], "JW_2");
   
   document.getElementById("storyinfo").style.display = "block";
   
@@ -205,9 +213,9 @@ async function ShowStats()
   let accountMasteries = await GetData("account/mastery/points" + APIKey);
   
   let earnedMasteryTotal = GetEarnedMasteryPoints( accountMasteries );
-  let earnedMasteryMax = 667;
+  let earnedMasteryMax = 775;
   let spentMasteryTotal = GetSpentMasteryPoints( accountMasteries );
-  let spentMasteryMax = 514;
+  let spentMasteryMax = 600;
   
   document.getElementById("masteries1").innerHTML = document.getElementById("masteries1").innerHTML.replace("$VALUE1$", earnedMasteryTotal.reduce(Add) );
   document.getElementById("masteries1").innerHTML = document.getElementById("masteries1").innerHTML.replace("$VALUE2$", earnedMasteryMax );
@@ -223,7 +231,7 @@ async function ShowStats()
 function GetEarnedMasteryPoints( data )
 {
   // this returns a list of earned points by region
-  let points = [ 0, 0, 0, 0, 0, 0 ];
+  let points = [ 0, 0, 0, 0, 0, 0, 0 ];
   
   let totals = data.totals;
   
@@ -253,6 +261,10 @@ function GetEarnedMasteryPoints( data )
     {
       points[5] = totals[i].earned;
     }
+    else if ( totals[i].region == "Janthir Wilds" )
+    {
+      points[6] = totals[i].earned;
+    }
   }
   
   return points;
@@ -261,7 +273,7 @@ function GetEarnedMasteryPoints( data )
 function GetSpentMasteryPoints( data )
 {
   // this returns a list of spent points by region
-  let points = [ 0, 0, 0, 0, 0, 0 ];
+  let points = [ 0, 0, 0, 0, 0, 0, 0 ];
   
   let totals = data.totals;
   
@@ -290,6 +302,10 @@ function GetSpentMasteryPoints( data )
     else if ( totals[i].region == "Secrets of the Obscure" )
     {
       points[5] = totals[i].spent;
+    }
+    else if ( totals[i].region == "Janthir Wilds" )
+    {
+      points[6] = totals[i].spent;
     }
   }
   
@@ -769,35 +785,55 @@ function SetupAchievementIDs( data )
       storyMasteryIDs[43] = data[i].id;
       storyMaxBits[43] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-    else if ( data[i].name == "Secrets of the Obscure: Act 1 Mastery" )
+	else if ( data[i].name == "The Jade Crisis" )
     {
       storyMasteryIDs[44] = data[i].id;
       storyMaxBits[44] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-    else if ( data[i].name == "Secrets of the Obscure: Act 2 Mastery" )
+	else if ( data[i].name == "What Lies Within" )
     {
       storyMasteryIDs[45] = data[i].id;
       storyMaxBits[45] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-    else if ( data[i].name == "Secrets of the Obscure: Act 3 Mastery" )
+    else if ( data[i].name == "Secrets of the Obscure: Act 1 Mastery" )
     {
       storyMasteryIDs[46] = data[i].id;
       storyMaxBits[46] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Secrets of the Obscure: Through the Veil Mastery" )
+    else if ( data[i].name == "Secrets of the Obscure: Act 2 Mastery" )
     {
       storyMasteryIDs[47] = data[i].id;
       storyMaxBits[47] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Secrets of the Obscure: The Realm of Dreams Mastery" )
+    else if ( data[i].name == "Secrets of the Obscure: Act 3 Mastery" )
     {
       storyMasteryIDs[48] = data[i].id;
       storyMaxBits[48] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Secrets of the Obscure: The Midnight King Mastery" )
+	else if ( data[i].name == "Secrets of the Obscure: Through the Veil Mastery" )
     {
       storyMasteryIDs[49] = data[i].id;
       storyMaxBits[49] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Secrets of the Obscure: The Realm of Dreams Mastery" )
+    {
+      storyMasteryIDs[50] = data[i].id;
+      storyMaxBits[50] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Secrets of the Obscure: The Midnight King Mastery" )
+    {
+      storyMasteryIDs[51] = data[i].id;
+      storyMaxBits[51] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Janthir Wilds: Act 1 Mastery" )
+    {
+      storyMasteryIDs[52] = data[i].id;
+      storyMaxBits[52] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+	else if ( data[i].name == "Janthir Wilds: Act 2 Mastery" )
+    {
+      storyMasteryIDs[53] = data[i].id;
+      storyMaxBits[53] = data[i].tiers[data[i].tiers.length - 1].count;
     }
   }
 }
@@ -945,6 +981,7 @@ function SetupMasteryPercentageGraph( pointTotals, maximum )
   let IBS = pointTotals[3] / maximum;
   let EOD = pointTotals[4] / maximum;
   let SOTO = pointTotals[5] / maximum;
+  let JW = pointTotals[6] / maximum;
   let missingPercentage = ( maximum - pointTotals.reduce(Add) ) / maximum;
   
   var chart = Highcharts.chart('chart4', {
@@ -1008,6 +1045,11 @@ function SetupMasteryPercentageGraph( pointTotals, maximum )
             name: 'Secrets of the Obscure',
             color: '#ffc338',
             y: SOTO
+        }, 
+        {
+            name: 'Janthir Wilds',
+            color: '#0d0db8',
+            y: JW
         }, 
         {
             name: 'Unearned',
@@ -1081,7 +1123,7 @@ function SetupDyePercentageGraph( totalDyes, dyeCounts )
         }, 
         {
             name: 'Exclusive',
-            color: '#391bfa',
+            color: '#a200ff',
             y: exclusivePercentage
         }, 
         {

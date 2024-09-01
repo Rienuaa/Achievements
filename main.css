@@ -88,48 +88,68 @@ progress
 .LW1
 {
   background-color: #fc4949;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .LW2
 {
   background-color: #c92424;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .HOT
 {
   background-color: #3aba53;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .LW3
 {
   background-color: #289c28;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .POF
 {
   background-color: #7e44c9;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .LW4
 {
   background-color: #885bc2;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .LW5
 {
   background-color: #51cfe8;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .EOD
 {
   background-color: #40aae3;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
+}
+
+.Interlude
+{
+  background-color: #00ffc8;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
 .SOTO
 {
   background-color: #ffc338;
+  text-shadow:1px 1px 10px #fff, 1px 1px 10px #ccc;
 }
 
+.JW
+{
+  background-color: #0d0db8;
+  text-shadow: 1px 1px 10px #fff, 1px 1px 10px #ccc;
+}
 
 #storyinfo
 {
