@@ -85,6 +85,12 @@ progress
   width: 100%;
 }
 
+#legendaryList
+{
+  display: table;
+  margin: 0 auto;
+}
+
 .LW1
 {
   background-color: #fc4949;

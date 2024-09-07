@@ -208,6 +208,10 @@ async function ShowStats()
   
   SetupDyePercentageGraph( totalDyes, dyeCounts );
   
+  // cosmetic wardrobe
+  
+  
+  
   // masteries!
   
   let accountMasteries = await GetData("account/mastery/points" + APIKey);
@@ -226,6 +230,51 @@ async function ShowStats()
   document.getElementById("masteries2").style.display = "block";
   
   SetupMasteryPercentageGraph( spentMasteryTotal, spentMasteryMax );
+  
+  // legendaries
+  
+  let accountLegendaries = await GetData("account/legendaryarmory" + APIKey);
+  
+  let legendaryCount = GetEarnedLegendariesCount(accountLegendaries);
+  let earnedLegendaries = GetEarnedLegendaries(accountLegendaries);
+    
+  document.getElementById("legendaries1").innerHTML = document.getElementById("legendaries1").innerHTML.replace("$VALUE1$", legendaryCount );
+  document.getElementById("legendaries1").style.display = "block";
+  
+  
+  
+}
+
+async function GetEarnedLegendaries( data )
+{
+	// returns a list of item namespaces
+	let names = [];
+	
+	for ( let i = 0; i < data.length; i++)
+	{
+		let id = data[i].id;
+		let item = await GetData("items/" + id);
+		let name = item.name;
+		names[i] = name;
+	}
+	
+	if (names.length > 0)
+	{
+		let ul = document.getElementById("legendaryList");
+
+		for (let i = 0; i < names.length; i++)
+		{
+			let li = document.createElement("li");
+			li.innerHTML = names[i];
+			ul.appendChild(li);
+		}
+	}
+}
+
+function GetEarnedLegendariesCount( data )
+{
+	// this returns a count of legendaries
+	return data.length;
 }
 
 function GetEarnedMasteryPoints( data )
