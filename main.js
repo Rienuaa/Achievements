@@ -179,6 +179,7 @@ async function ShowStats()
   // janthir Wilds
   SetStoryBlock( storyPercentages[52], "JW_1");
   SetStoryBlock( storyPercentages[53], "JW_2");
+  SetStoryBlock( storyPercentages[54], "JW_3");
   
   document.getElementById("storyinfo").style.display = "block";
   
@@ -859,30 +860,35 @@ function SetupAchievementIDs( data )
       storyMasteryIDs[48] = data[i].id;
       storyMaxBits[48] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Secrets of the Obscure: Through the Veil Mastery" )
+	  else if ( data[i].name == "Secrets of the Obscure: Through the Veil Mastery" )
     {
       storyMasteryIDs[49] = data[i].id;
       storyMaxBits[49] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Secrets of the Obscure: The Realm of Dreams Mastery" )
+	  else if ( data[i].name == "Secrets of the Obscure: The Realm of Dreams Mastery" )
     {
       storyMasteryIDs[50] = data[i].id;
       storyMaxBits[50] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Secrets of the Obscure: The Midnight King Mastery" )
+	  else if ( data[i].name == "Secrets of the Obscure: The Midnight King Mastery" )
     {
       storyMasteryIDs[51] = data[i].id;
       storyMaxBits[51] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Janthir Wilds: Act 1 Mastery" )
+	  else if ( data[i].name == "Janthir Wilds: Act 1 Mastery" )
     {
       storyMasteryIDs[52] = data[i].id;
       storyMaxBits[52] = data[i].tiers[data[i].tiers.length - 1].count;
     }
-	else if ( data[i].name == "Janthir Wilds: Act 2 Mastery" )
+	  else if ( data[i].name == "Janthir Wilds: Act 2 Mastery" )
     {
       storyMasteryIDs[53] = data[i].id;
       storyMaxBits[53] = data[i].tiers[data[i].tiers.length - 1].count;
+    }
+    else if ( data[i].name == "Janthir Wilds: Godspawn Mastery" )
+    {
+      storyMasteryIDs[54] = data[i].id;
+      storyMaxBits[54] = data[i].tiers[data[i].tiers.length - 1].count;
     }
   }
 }
