@@ -241,6 +241,15 @@ async function ShowStats()
     
   document.getElementById("legendaries1").innerHTML = document.getElementById("legendaries1").innerHTML.replace("$VALUE1$", legendaryCount );
   document.getElementById("legendaries1").style.display = "block";
+
+  // WVW
+
+  let wvwRank = accountInfo.wvw_rank;
+  let wvwData = GetAchievementProgress( accountAchievements, wvwIDs[0] );
+
+  document.getElementById("wvw1").innerHTML = document.getElementById("wvw1").innerHTML.replace("$VALUE1$", wvwRank);
+  document.getElementById("wvw1").innerHTML = document.getElementById("wvw1").innerHTML.replace("$VALUE2$", wvwData);
+  document.getElementById("wvw1").style.display = "block";
 }
 
 async function GetEarnedLegendaries( data )
@@ -432,7 +441,7 @@ async function LoadMainAchievementData()
   
   totalAchievementIDs = await GetData("achievements");
   
-  achievementIDs = fractalIDs + storyMasteryIDs;
+  achievementIDs = fractalIDs + storyMasteryIDs + wvwIDs;
   
   achievementData = await GetAchievementData(achievementIDs);
   
@@ -581,6 +590,27 @@ function FindAchievement( accountdata, id )
   return 0;
 }
 
+function GetAchievementProgress(accountdata, id)
+{
+  for (let i = 0; i < accountdata.length; i++)
+    {
+      if ( accountdata[i].id == id)
+      {
+        if ( accountdata[i].done == true )
+        {
+          return 100;
+        }
+        else
+        {
+          return accountdata[i].current;
+        }
+      }
+    }
+  
+    return 0;
+}
+
+var wvwIDs = [7912];
 var fractalIDs = [ 2965, 2894, 2217, 2415 ];
 var storyMasteryIDs = [ 6539, 6564, 6682, 6754, 6784, 1796, 1795, 1784, 1790, 1785, 1816, 1827, 2054, 2314, 2509, 2364, 2397, 3050, 3123, 3171, 3348, 3442, 3516, 3900, 3913, 3902, 3988, 4093, 4195, 4359, 4544, 4689, 4940, 5012, 5107, 5203, 5291, 5401, 5706, 6090, 6504, 6401, 6202, 6133, 6873, 6901, 7104, 7203, 7014, 7666, 7831, 8019, 8208, 8217, 8455 ];
 var storyMaxBits = [ 12, 15, 13, 15, 18, 9, 9, 6, 9, 7, 6, 6, 8, 18, 14, 13, 8, 18, 23, 21, 28, 20, 36, 15, 18, 19, 30, 35, 38, 38, 30, 18, 54, 20, 37, 27, 17, 32, 24, 16, 13, 14, 13, 12, 18, 20, 8, 8, 6, 6, 12, 16, 24, 20, 15 ];
